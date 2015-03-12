@@ -1,0 +1,11 @@
+{
+  "name": "markheim",
+  "version": "1.0.0",
+  "description": "Based on Gulp, inspired by Jekyll...it's Markheim, the killer static site generator for everyone.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Birbeck <mark.birbeck@gmail.com> (http://markbirbeck.com/)",
+  "license": "MIT"
+}
