@@ -6,7 +6,6 @@ var yaml = require('js-yaml');
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var gulpIf = require('gulp-if');
 
 var merge = require('deepmerge');
 var frontMatter = require('./lib/front-matter');
@@ -194,10 +193,7 @@ gulp.task('build', ['clean'], function() {
 
     .pipe(frontMatter.parse())
     .pipe(
-      gulpIf(
-        function(file) {
-          return 'frontMatter' in file;
-        },
+      frontMatter.test(
         es.map(function(file, cb) {
           gutil.log('front matter found in', file.relative, '=>', file.frontMatter);
           cb(null, file);
