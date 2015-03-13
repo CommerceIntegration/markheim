@@ -155,9 +155,9 @@ var clean = include.concat(exclude);
  * Handy debug function:
  */
 
-var logFileName = function() {
+var logFileName = function(prefix) {
   return es.map(function (file, cb) {
-    gutil.log('relative', file.relative);
+    gutil.log('relative', prefix, ': ', file.relative);
     cb(null, file);
   });
 };
