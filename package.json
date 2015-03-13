@@ -18,5 +18,8 @@
     "gulp-util": "^3.0.4",
     "js-yaml": "^3.2.7",
     "lazypipe": "^0.2.2"
+  },
+  "devDependencies": {
+    "gulp-debug": "^2.0.1"
   }
 }

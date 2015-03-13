@@ -6,6 +6,7 @@ var yaml = require('js-yaml');
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var debug = require('gulp-debug');
 
 var merge = require('deepmerge');
 var frontMatter = require('./lib/front-matter');
@@ -150,18 +151,6 @@ config.keep_files.map(function(file) {
   });
 
 var clean = include.concat(exclude);
-
-
-/**
- * Handy debug function:
- */
-
-var logFileName = function(prefix) {
-  return es.map(function (file, cb) {
-    gutil.log('relative', prefix, ': ', file.relative);
-    cb(null, file);
-  });
-};
 
 
 /**
