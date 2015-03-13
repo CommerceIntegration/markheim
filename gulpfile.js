@@ -6,8 +6,10 @@ var yaml = require('js-yaml');
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var gulpIf = require('gulp-if');
 
 var merge = require('deepmerge');
+var frontMatter = require('front-matter');
 
 /**
  * First load the Markheim configuration file:
@@ -184,6 +186,34 @@ gulp.task('build', ['clean'], function() {
   gutil.log('      Generating...');
 
   return gulp.src(src)
-    .pipe(logFileName())
+    .pipe(es.map(function(file, cb) {
+      var contents = String(file.contents);
+
+      /**
+       * We need to test for the presence of front matter separately from
+       * parsing out the front matter, because empty front matter is used
+       * as an indicator that a file should go through the 'convert'
+       * pipeline:
+       */
+
+      if (frontMatter.test(contents)) {
+        var content = frontMatter(contents);
+
+        file.contents = new Buffer(content.body);
+        file.frontMatter = content.attributes;
+      }
+      cb(null, file);
+    }))
+    .pipe(
+      gulpIf(
+        function(file) {
+          return 'frontMatter' in file;
+        },
+        es.map(function(file, cb) {
+          gutil.log('front matter found in', file.relative, '=>', file.frontMatter);
+          cb(null, file);
+        })
+      )
+    )
     .pipe(gulp.dest(paths.destination));
 });
