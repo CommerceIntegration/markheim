@@ -1,1 +1,13 @@
 ssg: jekyll
+front_matter:
+  merge:
+    - [categories, category]
+  internals:
+    - layout
+    - permalink
+    - published
+  page:
+    - categories
+    - path
+    - tags
+    - title
