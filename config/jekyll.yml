@@ -1,0 +1,5 @@
+includes:     ./_includes
+exclude:      [node_modules, package.json]
+sass:         ./_sass
+posts:        ./_posts
+config:       _config.yml
