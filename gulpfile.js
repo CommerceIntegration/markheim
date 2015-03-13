@@ -181,6 +181,11 @@ gulp.task('clean', function(cb) {
  * =========
  */
 
+var convert = es.map(function(file, cb) {
+  gutil.log('front matter found in', file.relative, '=>', file.frontMatter);
+  cb(null, file);
+});
+
 gulp.task('build', ['clean'], function() {
   gutil.log('      Generating...');
 
@@ -192,13 +197,6 @@ gulp.task('build', ['clean'], function() {
      */
 
     .pipe(frontMatter.parse())
-    .pipe(
-      frontMatter.test(
-        es.map(function(file, cb) {
-          gutil.log('front matter found in', file.relative, '=>', file.frontMatter);
-          cb(null, file);
-        })
-      )
-    )
+    .pipe(frontMatter.test(convert))
     .pipe(gulp.dest(paths.destination));
 });
