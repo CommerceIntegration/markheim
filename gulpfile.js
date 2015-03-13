@@ -101,6 +101,8 @@ paths.includes = path.join(paths.root, './_includes');
 paths.sass = path.join(paths.root, './_sass');
 paths.posts = path.join(paths.root, './_posts');
 
+config.paths = paths;
+
 gutil.log('            Source:', paths.source);
 gutil.log('       Destination:', paths.destination);
 
