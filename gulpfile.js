@@ -2,7 +2,6 @@ var path = require('path');
 var fs = require('fs');
 
 var es = require('event-stream');
-var lazypipe = require('lazypipe');
 var yaml = require('js-yaml');
 
 var gulp = require('gulp');
@@ -182,10 +181,7 @@ gulp.task('clean', function(cb) {
  * =========
  */
 
-var convert = lazypipe()
-  .pipe(function() {
-    return frontMatter.globals(config);
-  });
+var convert = require('./lib/convert')(config);
 
 gulp.task('build', ['clean'], function() {
   gutil.log('      Generating...');
