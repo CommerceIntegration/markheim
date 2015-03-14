@@ -121,7 +121,6 @@ exclude.push(paths.plugins);
 exclude.push(paths.layouts);
 exclude.push(paths.includes);
 exclude.push(paths.sass);
-exclude.push(paths.posts);
 exclude.push(paths.destination);
 
 src.push(path.join(paths.source, '**', '*'));
