@@ -2,6 +2,10 @@ ssg: jekyll
 front_matter:
   merge:
     - [categories, category]
+  split:
+    - categories
+  flatten:
+    - categories
   internals:
     - layout
     - permalink
