@@ -1,4 +1,11 @@
 ssg: jekyll
+post_name_format: (\d{4})\-(\d{2})\-(\d{2})\-(.*)\.(.*)
+permalink: none
+permalink_templates:
+  date:    /:categories/:year/:month/:day/:title.html
+  pretty:  /:categories/:year/:month/:day/:title/
+  ordinal: /:categories/:year/:y_day/:title.html
+  none:    /:categories/:title.html
 front_matter:
   merge:
     - [categories, category]
