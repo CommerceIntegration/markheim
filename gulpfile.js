@@ -22,7 +22,7 @@ try {
     fs.readFileSync(path.join(__dirname, 'config', 'default.yml'), 'utf8')
   );
 } catch (e) {
-  new gutil.PluginError('Markheim', e);
+  throw new gutil.PluginError('Markheim', e);
 }
 
 
@@ -41,7 +41,7 @@ try {
     )
   );
 } catch (e) {
-  new gutil.PluginError('Markheim', e);
+  throw new gutil.PluginError('Markheim', e);
 }
 
 
@@ -62,7 +62,7 @@ try {
     )
   );
 } catch (e) {
-  new gutil.PluginError('Markheim', e);
+  throw new gutil.PluginError('Markheim', e);
 }
 
 
@@ -90,7 +90,7 @@ try {
     yaml.safeLoad(fs.readFileSync(userConfigFile, 'utf8'))
   );
 } catch (e) {
-  new gutil.PluginError('Markheim', e);
+  throw new gutil.PluginError('Markheim', e);
 }
 
 paths.source = path.join(paths.root, config.source);
