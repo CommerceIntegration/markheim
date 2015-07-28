@@ -100,6 +100,7 @@ paths.layouts = path.join(paths.root, config.layouts);
 paths.includes = path.join(paths.root, './_includes');
 paths.sass = path.join(paths.root, './_sass');
 paths.posts = path.join(paths.root, './_posts');
+paths.drafts = path.join(paths.root, config.drafts);
 
 config.paths = paths;
 
@@ -122,6 +123,7 @@ exclude.push(paths.layouts);
 exclude.push(paths.includes);
 exclude.push(paths.sass);
 exclude.push(paths.destination);
+exclude.push(paths.drafts);
 
 src.push(path.join(paths.source, '**', '*'));
 
