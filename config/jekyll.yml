@@ -1,6 +1,7 @@
 includes:     ./_includes
 exclude:      [node_modules, package.json]
-sass:         ./_sass
+sass:
+  sass_dir:   ./_sass
 posts:        ./_posts
 drafts:       ./_drafts
 config:       _config.yml

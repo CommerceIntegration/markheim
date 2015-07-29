@@ -98,7 +98,7 @@ paths.destination = path.join(paths.root, config.destination);
 paths.plugins = path.join(paths.root, config.plugins);
 paths.layouts = path.join(paths.root, config.layouts);
 paths.includes = path.join(paths.root, './_includes');
-paths.sass = path.join(paths.root, './_sass');
+paths.sass = path.join(paths.root, config.sass.sass_dir);
 paths.posts = path.join(paths.root, './_posts');
 paths.drafts = path.join(paths.root, config.drafts);
 
