@@ -22,7 +22,7 @@ try {
     fs.readFileSync(path.join(__dirname, 'config', 'default.yml'), 'utf8')
   );
 } catch (e) {
-  new gutil.PluginError('Markheim', e);
+  throw new gutil.PluginError('Markheim', e);
 }
 
 
@@ -41,7 +41,7 @@ try {
     )
   );
 } catch (e) {
-  new gutil.PluginError('Markheim', e);
+  throw new gutil.PluginError('Markheim', e);
 }
 
 
@@ -62,7 +62,7 @@ try {
     )
   );
 } catch (e) {
-  new gutil.PluginError('Markheim', e);
+  throw new gutil.PluginError('Markheim', e);
 }
 
 
@@ -90,7 +90,7 @@ try {
     yaml.safeLoad(fs.readFileSync(userConfigFile, 'utf8'))
   );
 } catch (e) {
-  new gutil.PluginError('Markheim', e);
+  throw new gutil.PluginError('Markheim', e);
 }
 
 paths.source = path.join(paths.root, config.source);
@@ -100,6 +100,7 @@ paths.layouts = path.join(paths.root, config.layouts);
 paths.includes = path.join(paths.root, './_includes');
 paths.sass = path.join(paths.root, './_sass');
 paths.posts = path.join(paths.root, './_posts');
+paths.drafts = path.join(paths.root, config.drafts);
 
 config.paths = paths;
 
@@ -122,6 +123,7 @@ exclude.push(paths.layouts);
 exclude.push(paths.includes);
 exclude.push(paths.sass);
 exclude.push(paths.destination);
+exclude.push(paths.drafts);
 
 src.push(path.join(paths.source, '**', '*'));
 
@@ -167,13 +169,64 @@ gulp.task('clean', function(cb) {
 
 
 /**
+ * P R E P R O C E S S
+ * ===================
+ *
+ * Build a map of the site by running through each document and collecting
+ * its data, path, title, type, etc.
+ */
+
+var shared = {
+  config: config,
+  site: {
+    pages: [],
+    posts: []
+  }
+};
+
+gulp.task('preprocess', function(callback) {
+  var setType = require('./lib/set-type');
+  var variables = require('./lib/variables')(shared);
+
+  return gulp.src(src)
+
+    /**
+     * First work out the type of the document and collect its values:
+     */
+
+    .pipe(setType(config))
+    .pipe(frontMatter.parse())
+    .pipe(frontMatter.test(variables()))
+
+      /**
+       * Now save the document's details to the appropriate collection:
+       */
+
+    .pipe(es.map(function(file, cb) {
+      if (file.type === 'posts') {
+        shared.site.posts.push(file.globals.page);
+      }
+      else if (file.type === 'pages') {
+        if (!file.globals) {
+          gutil.log('No page variable yet:', file.relative);
+        } else {
+          shared.site.pages.push(file.globals.page);
+        }
+      } else {
+        gutil.log('Other type:', file.type, file.relative);
+      }
+      cb(null, file);
+    }));
+});
+
+
+/**
  * B U I L D
  * =========
  */
 
-var convert = require('./lib/convert')(config);
-
-gulp.task('build', ['clean'], function() {
+gulp.task('build', ['clean', 'preprocess'], function() {
+  var convert = require('./lib/convert')(shared);
   gutil.log('      Generating...');
 
   return gulp.src(src)

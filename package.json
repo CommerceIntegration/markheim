@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Based on Gulp, inspired by Jekyll...it's Markheim, the killer static site generator for everyone.",
   "main": "index.js",
+  "bin": {
+    "markheim": "./bin/markheim.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,9 +19,12 @@
     "gulp": "^3.8.11",
     "gulp-if": "^1.2.5",
     "gulp-util": "^3.0.4",
+    "interpret": "^0.6.5",
     "js-yaml": "^3.2.7",
     "lazypipe": "^0.2.2",
+    "liftoff": "^2.1.0",
     "lodash": "^3.5.0",
+    "minimist": "^1.1.2",
     "url-template": "^2.0.5"
   },
   "devDependencies": {
