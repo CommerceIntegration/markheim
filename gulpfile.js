@@ -173,9 +173,8 @@ gulp.task('clean', function(cb) {
  * =========
  */
 
-var convert = require('./lib/convert')(config);
-
 gulp.task('build', ['clean'], function() {
+  var convert = require('./lib/convert')(config);
   gutil.log('      Generating...');
 
   return gulp.src(src)
