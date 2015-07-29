@@ -173,8 +173,16 @@ gulp.task('clean', function(cb) {
  * =========
  */
 
+var shared = {
+  config: config,
+  site: {
+    pages: [],
+    posts: []
+  }
+};
+
 gulp.task('build', ['clean'], function() {
-  var convert = require('./lib/convert')(config);
+  var convert = require('./lib/convert')(shared);
   gutil.log('      Generating...');
 
   return gulp.src(src)
