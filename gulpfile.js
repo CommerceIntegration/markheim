@@ -198,9 +198,9 @@ gulp.task('preprocess', function(callback) {
     .pipe(frontMatter.parse())
     .pipe(frontMatter.test(variables()))
 
-      /**
-       * Now save the document's details to the appropriate collection:
-       */
+    /**
+     * Now save the document's details to the appropriate collection:
+     */
 
     .pipe(es.map(function(file, cb) {
       if (file.type === 'posts') {
