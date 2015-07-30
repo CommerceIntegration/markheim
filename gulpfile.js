@@ -186,7 +186,7 @@ var shared = {
 
 gulp.task('preprocess', function(callback) {
   var setType = require('./lib/set-type');
-  var variables = require('./lib/variables')(shared);
+  var convert = require('./lib/convert')(shared);
 
   return gulp.src(src)
 
@@ -196,7 +196,7 @@ gulp.task('preprocess', function(callback) {
 
     .pipe(setType(config))
     .pipe(frontMatter.parse())
-    .pipe(frontMatter.test(variables()))
+    .pipe(frontMatter.test(convert()))
 
     /**
      * Now save the document's details to the appropriate collection:
