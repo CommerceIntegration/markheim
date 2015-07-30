@@ -12,6 +12,7 @@
   "author": "Mark Birbeck <mark.birbeck@gmail.com> (http://markbirbeck.com/)",
   "license": "MIT",
   "dependencies": {
+    "browser-sync": "^2.8.1",
     "deepmerge": "^0.2.7",
     "del": "^1.2.0",
     "event-stream": "^3.3.0",

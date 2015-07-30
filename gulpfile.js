@@ -240,3 +240,29 @@ gulp.task('build', ['clean', 'preprocess'], function() {
     .pipe(frontMatter.test(convert()))
     .pipe(gulp.dest(paths.destination));
 });
+
+
+/**
+ * S E R V E
+ * =========
+ */
+
+gulp.task('serve', ['build'], function() {
+  var browserSync = require('browser-sync').create();
+
+  browserSync.init({
+    server: {
+      baseDir: paths.destination
+    },
+    port: config.port,
+    ui: {
+      port: config.port + 1
+    },
+
+    /**
+     * Watch for changes to any of our files:
+     */
+
+    files: paths.destination
+  });
+});
