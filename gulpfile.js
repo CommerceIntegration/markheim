@@ -180,8 +180,17 @@ gulp.task('clean', function(cb) {
 var shared = {
   config: config,
   site: {
+    time: '',
     pages: [],
-    posts: []
+    posts: [],
+    related_posts: [],
+    static_files: [],
+    html_pages: [],
+    collections: [],
+    data: [],
+    documents: [],
+    categories: {},
+    tags: {}
   }
 };
 
