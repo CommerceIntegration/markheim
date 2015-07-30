@@ -24,6 +24,7 @@
     "lazypipe": "^0.2.4",
     "liftoff": "^2.1.0",
     "lodash": "^3.5.0",
+    "markdown-it": "^4.4.0",
     "minimist": "^1.1.2",
     "node-sass": "^3.2.0",
     "url-template": "^2.0.5"
