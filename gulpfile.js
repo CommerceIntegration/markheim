@@ -10,6 +10,7 @@ var debug = require('gulp-debug');
 
 var merge = require('deepmerge');
 var frontMatter = require('./lib/front-matter');
+var permalink = require('./lib/permalink');
 
 /**
  * First load the Markheim configuration file:
@@ -197,6 +198,8 @@ gulp.task('preprocess', function(callback) {
     .pipe(setType(config))
     .pipe(frontMatter.parse())
     .pipe(frontMatter.test(convert()))
+
+    .pipe(permalink(shared.config))
 
     /**
      * Now save the document's details to the appropriate collection:
