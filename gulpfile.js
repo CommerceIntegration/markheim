@@ -468,3 +468,61 @@ gulp.task('dryrun', ['preprocess'], function(cb) {
   // console.log(shared.site.posts);
   // console.log(shared.site.pages);
 });
+
+
+/**
+ * P U B L I S H
+ * =============
+ */
+
+var awspublish = require('gulp-awspublish');
+
+gulp.task('publish', function() {
+
+  /**
+   * Create a new publisher using S3 options as described at:
+   *
+   * http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#constructor-property
+   */
+
+  var publisher = awspublish.create({
+    params: {
+      Bucket: process.env.AWS_BUCKET
+    },
+    region: process.env.AWS_DEFAULT_REGION,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  });
+
+  /**
+   * Process whatever is in the output directory:
+   */
+
+  return gulp.src(path.join(paths.destination, config.baseurl, '**/*'))
+
+    /**
+     * Publisher will add Content-Length, Content-Type and headers specified above
+     * If not specified it will set x-amz-acl to public-read by default
+     */
+
+    .pipe(publisher.publish())
+
+    /**
+     * Create a cache file to speed up consecutive uploads:
+     */
+
+    .pipe(publisher.cache())
+
+    /**
+     * Sync with S3 bucket, which means that files that are not present locally will
+     * be removed from the bucket:
+     */
+
+    .pipe(publisher.sync())
+
+    /**
+     * Log activity:
+     */
+
+    .pipe(awspublish.reporter());
+});
