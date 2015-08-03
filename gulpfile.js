@@ -1,6 +1,8 @@
 var path = require('path');
 var fs = require('fs');
 
+var _ = require('lodash');
+
 var es = require('event-stream');
 var yaml = require('js-yaml');
 
@@ -11,6 +13,7 @@ var debug = require('gulp-debug');
 var merge = require('deepmerge');
 var frontMatter = require('./lib/front-matter');
 var permalink = require('./lib/permalink');
+var templatize = require('./lib/templatize');
 
 /**
  * First load the Markheim configuration file:
@@ -193,10 +196,31 @@ var shared = {
     tags: {}
   }
 };
+var site = shared.site;
+
+var cache = [];
+
+var getExcerpt = function(config, content) {
+  var excerpt_separator = config.excerpt_separator;
+
+  if (excerpt_separator) {
+    var re = new RegExp('([^]*)' + excerpt_separator);
+    var result = re.exec(content);
+
+    if (result && result[1]) {
+      return result[1];
+    }
+  }
+};
+
+
+/**
+ * The output of the preprocess step is a map of the site and metadata for
+ * each page, but no content has yet been processed:
+ */
 
 gulp.task('preprocess', function(callback) {
   var setType = require('./lib/set-type');
-  var convert = require('./lib/convert')(shared);
 
   return gulp.src(src)
 
@@ -206,26 +230,81 @@ gulp.task('preprocess', function(callback) {
 
     .pipe(setType(config))
     .pipe(frontMatter.parse())
-    .pipe(frontMatter.test(convert()))
+    .pipe(frontMatter.collate(config))
 
-    .pipe(permalink(shared.config))
+
+    /**
+     * Now set the page variables:
+     */
+
+    .pipe(es.map(function(file, cb) {
+      var fm = file.frontMatter;
+
+      if (fm) {
+        var content = String(file.contents);
+
+        file.page = {
+          content: content,
+          title: fm.title,
+          excerpt: getExcerpt(config, content),
+          url: '',
+          date: fm.date,
+          id: '',
+          categories: fm.categories,
+          tags: fm.tags,
+          path: fm.path || file.path,
+          next: '',
+          prev: ''
+        };
+      }
+      cb(null, file);
+    }))
+
+    .pipe(permalink(config))
+
+    /**
+     * Save the document, ready for further processing:
+     */
+
+    .pipe(es.map(function(file, cb) {
+      if (file.page) {
+        cache.push(file);
+        cb(null, file);
+      } else {
+        cb();
+      }
+    }))
 
     /**
      * Now save the document's details to the appropriate collection:
      */
 
     .pipe(es.map(function(file, cb) {
-      if (file.type === 'posts') {
-        shared.site.posts.push(file.globals.page);
-      }
-      else if (file.type === 'pages') {
-        if (!file.globals) {
-          gutil.log('No page variable yet:', file.relative);
-        } else {
-          shared.site.pages.push(file.globals.page);
+      var page = file.page;
+
+      if (page) {
+        if (page.categories && Array.isArray(page.categories)) {
+          page.categories.forEach(function (category) {
+            site.categories[category] = site.categories[category] || [];
+            site.categories[category].push(page);
+          });
         }
-      } else {
-        gutil.log('Other type:', file.type, file.relative);
+
+        if (page.tags && Array.isArray(page.tags)) {
+          page.tags.forEach(function (tag) {
+            site.tags[tag] = site.tags[tag] || [];
+            site.tags[tag].push(page);
+          });
+        }
+
+        if (file.type === 'posts') {
+          site.posts.push(page);
+        }
+        else if (file.type === 'pages') {
+          site.pages.push(page);
+        } else {
+          gutil.log('Other type:', file.type, file.relative);
+        }
       }
       cb(null, file);
     }));
@@ -237,20 +316,112 @@ gulp.task('preprocess', function(callback) {
  * =========
  */
 
-gulp.task('build', ['clean', 'preprocess'], function() {
-  var convert = require('./lib/convert')(shared);
+gulp.task('build', ['posts'], function() {
+});
+
+
+/**
+ * P O S T S
+ * =========
+ */
+
+var highland = require('highland');
+var md = require('markdown-it')();
+
+gulp.task('posts', ['preprocess'], function() {
   gutil.log('      Generating...');
 
-  return gulp.src(src)
+  return highland(cache)
 
     /**
-     * The first step is to parse any front matter, since that determines
-     * whether a file is simpy copied through, or gets processed:
+     * If the file is a Markdown file then process accordingly:
      */
 
+    .map(function(file) {
+      var markdownExtensions = config.markdown_ext;
+      var extname = path.extname(file.path).substring(1);
+
+      if (markdownExtensions.indexOf(extname) !== -1) {
+        file.contents = new Buffer(md.render(String(file.contents)));
+      }
+      return file;
+    })
+
+    /**
+     * If the file is a SASS file then process accordingly:
+     */
+
+    .map(function(file) {
+      var extname = path.extname(file.path).substring(1);
+      if (extname === 'scss') {
+        var sass = require('node-sass');
+        var content = String(file.contents);
+        var result = sass.renderSync({
+          data: content,
+          includePaths: [shared.config.paths.sass]
+        });
+        file.contents = result.css;
+        file.path = gutil.replaceExtension(file.path, '.css');
+      }
+      return file;
+    })
+    .pipe(templatize(shared))
+
     .pipe(frontMatter.parse())
-    .pipe(frontMatter.test(convert()))
-    .pipe(gulp.dest(paths.destination));
+    .pipe(frontMatter.collate(config))
+
+
+    /**
+     * Now set the page variables:
+     */
+
+    .pipe(es.map(function(file, cb) {
+      var fm = file.frontMatter;
+
+      if (fm) {
+        var content = String(file.contents);
+
+        file.page = merge({
+          content: content,
+          title: fm.title,
+          excerpt: getExcerpt(config, content),
+          url: '',
+          date: fm.date,
+          id: '',
+          categories: fm.categories,
+          tags: fm.tags,
+          path: fm.path || file.path,
+          next: '',
+          prev: ''
+        }, file.page);
+      }
+      cb(null, file);
+    }))
+    .pipe(templatize(shared))
+
+    .pipe(es.map(function(file, cb) {
+      var page = file.page;
+
+      if (page && page.url) {
+        console.log('Mapped from:', file.path);
+        file.path = '.' + file.page.url;
+
+        /**
+         * Add 'index.html' to any URL that doesn't have a type on the end:
+         */
+
+        if (_.endsWith(file.path, '/')) {
+          file.path += 'index.html';
+        }
+        console.log('         to:', file.path);
+        console.log('       type:', file.type);
+      } else {
+        console.log('Didn\'t map url:', file.path, file.type);
+      }
+      return cb(null, file);
+    }))
+    .pipe(gulp.dest(path.join(paths.destination, config.baseurl)))
+    ;
 });
 
 
@@ -275,6 +446,23 @@ gulp.task('serve', ['build'], function() {
      * Watch for changes to any of our files:
      */
 
-    files: paths.destination
+    files: paths.destination,
+    startPath: config.baseurl
   });
+});
+
+
+/**
+ * D R Y R U N
+ * ===========
+ */
+
+gulp.task('dryrun', ['preprocess'], function(cb) {
+  console.log(config);
+  // console.log(shared);
+  // console.log(paths);
+  // console.log(src);
+  // console.log(shared.site);
+  // console.log(shared.site.posts);
+  // console.log(shared.site.pages);
 });
