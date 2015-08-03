@@ -245,6 +245,7 @@ gulp.task('preprocess', function(callback) {
 
         file.page = {
           content: content,
+          comments: fm.comments,
           title: fm.title,
           excerpt: getExcerpt(config, content),
           url: '',
@@ -383,6 +384,7 @@ gulp.task('posts', ['preprocess'], function() {
 
         file.page = merge({
           content: content,
+          comments: fm.comments,
           title: fm.title,
           excerpt: getExcerpt(config, content),
           url: '',
