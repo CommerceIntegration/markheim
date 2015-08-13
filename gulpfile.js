@@ -94,7 +94,7 @@ try {
     yaml.safeLoad(fs.readFileSync(userConfigFile, 'utf8'))
   );
 } catch (e) {
-  throw new gutil.PluginError('Markheim', e);
+  console.warn(' no configuration file present');
 }
 
 paths.source = path.join(paths.root, config.source);
