@@ -183,7 +183,7 @@ gulp.task('clean', function(cb) {
 var shared = {
   config: config,
   site: {
-    time: '',
+    time: new Date(),
     pages: [],
     posts: [],
     related_posts: [],
