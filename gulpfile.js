@@ -243,20 +243,15 @@ gulp.task('preprocess', function(callback) {
       if (fm) {
         var content = String(file.contents);
 
-        file.page = {
+        file.page = merge({
           content: content,
-          comments: fm.comments,
-          title: fm.title,
           excerpt: getExcerpt(config, content),
           url: '',
-          date: fm.date,
           id: '',
-          categories: fm.categories,
-          tags: fm.tags,
-          path: fm.path || file.path,
+          path: file.path, //fm.path will take priority
           next: '',
           prev: ''
-        };
+        }, fm);
       }
       cb(null, file);
     }))
