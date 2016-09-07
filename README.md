@@ -36,6 +36,34 @@ $ markheim build
 [18:53:03]       Generating...
 ```
 
+## Build and Serve a Site Locally
+
+```shell
+$ merkheim serve
+# => The current folder will be generated into ./_site and then served with BrowserSync
+```
+
+Sample run:
+
+```shell
+$ markheim serve
+[18:53:23] Configuration file: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site/_config.yml
+[18:53:23]             Source: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site
+[18:53:23]        Destination: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site/_site
+[18:53:23]       Preprocessing...
+[18:53:27]       Generating...
+[BS] Access URLs:
+ -------------------------------------
+       Local: http://localhost:4000
+    External: http://192.168.1.13:4000
+ -------------------------------------
+          UI: http://localhost:4001
+ UI External: http://192.168.1.13:4001
+ -------------------------------------
+[BS] Serving files from: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site/_site
+[BS] Watching files...
+```
+
 ### Destination folders are cleaned on site builds
 
 The contents of *destination* are automatically cleaned, by default, when the site is built. Files or folders that are not created by your site will be removed. Files and folders you wish to retain in *destination* may be specified within the *keep_files* configuration directive.
