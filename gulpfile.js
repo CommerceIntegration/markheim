@@ -136,9 +136,14 @@ include.map(function(directory) {
   src.push(path.join(directory, '**', '*'));
 });
 
-exclude.map(function(directory) {
-  src.push('!' + directory);
-  src.push('!' + path.join(directory, '**', '*'));
+exclude.map(function(directoryList) {
+  if (!Array.isArray(directoryList)) {
+    directoryList = [directoryList];
+  }
+  directoryList.forEach(function(directory) {
+    src.push('!' + directory);
+    src.push('!' + path.join(directory, '**', '*'));
+  })
 });
 
 /**
