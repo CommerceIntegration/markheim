@@ -28,13 +28,12 @@ $ merkheim build
 Sample run:
 
 ```shell
-$ jekyll build
-Configuration file: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site/_config.yml
-            Source: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site
-       Destination: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site/_site
-      Generating...
-                    done.
- Auto-regeneration: disabled. Use --watch to enable.
+$ markheim build
+[18:52:58] Configuration file: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site/_config.yml
+[18:52:58]             Source: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site
+[18:52:58]        Destination: /Users/markbirbeck/Documents/workspace/_norepo/my-awesome-site/_site
+[18:52:59]       Preprocessing...
+[18:53:03]       Generating...
 ```
 
 ### Destination folders are cleaned on site builds
