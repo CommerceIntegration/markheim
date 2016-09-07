@@ -406,7 +406,6 @@ gulp.task('posts', ['preprocess'], function() {
       var page = file.page;
 
       if (page && page.url) {
-        console.log('Mapped from:', file.path);
         file.path = '.' + file.page.url;
 
         /**
@@ -416,8 +415,6 @@ gulp.task('posts', ['preprocess'], function() {
         if (_.endsWith(file.path, '/')) {
           file.path += 'index.html';
         }
-        console.log('         to:', file.path);
-        console.log('       type:', file.type);
       } else {
         console.log('Didn\'t map url:', file.path, file.type);
       }
