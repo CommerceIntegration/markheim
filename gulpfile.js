@@ -8,7 +8,6 @@ var yaml = require('js-yaml');
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var debug = require('gulp-debug');
 
 var merge = require('deepmerge');
 var frontMatter = require('./lib/front-matter');
@@ -224,7 +223,7 @@ var getExcerpt = function(config, content) {
  * each page, but no content has yet been processed:
  */
 
-gulp.task('preprocess', function(callback) {
+gulp.task('preprocess', function(/*callback*/) {
   gutil.log('      Preprocessing...');
   var setType = require('./lib/set-type');
 
@@ -490,7 +489,7 @@ gulp.task('serve', ['build'], function() {
  * ===========
  */
 
-gulp.task('dryrun', ['preprocess'], function(cb) {
+gulp.task('dryrun', ['preprocess'], function(/*cb*/) {
   console.log(config);
   // console.log(shared);
   // console.log(paths);

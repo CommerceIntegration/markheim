@@ -9,7 +9,7 @@ var Markheim = new Liftoff({
   moduleName: 'gulp',
   configName: 'gulp',
   extensions: require('interpret').jsVariants
-}).on('require', function (name, module) {
+}).on('require', function (name/*, module*/) {
   console.log('Loading:', name);
 }).on('requireFail', function (name, err) {
   console.log('Unable to load:', name, err);
