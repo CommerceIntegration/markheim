@@ -327,7 +327,7 @@ gulp.task('build', ['posts'], function() {
  */
 
 var highland = require('highland');
-var md = require('markdown-it')();
+var md = require('markdown-it')({ html: true });
 
 gulp.task('posts', ['preprocess'], function() {
   gutil.log('      Generating...');
