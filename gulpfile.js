@@ -225,6 +225,7 @@ var getExcerpt = function(config, content) {
  */
 
 gulp.task('preprocess', function(callback) {
+  gutil.log('      Preprocessing...');
   var setType = require('./lib/set-type');
 
   return gulp.src(src)
