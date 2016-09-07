@@ -383,7 +383,7 @@ gulp.task('posts', ['preprocess'], function() {
       if (fm) {
         var content = String(file.contents);
 
-        file.page = merge({
+        file.page = merge(file.page, {
           content: content,
           comments: fm.comments,
           title: fm.title,
@@ -396,7 +396,7 @@ gulp.task('posts', ['preprocess'], function() {
           path: fm.path || file.path,
           next: '',
           prev: ''
-        }, file.page);
+        });
       }
       cb(null, file);
     }))
