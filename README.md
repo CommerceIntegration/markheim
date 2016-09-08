@@ -21,7 +21,7 @@ Finally, we can load the settings for a particular site. The location of these s
 ## Build a Site
 
 ```shell
-$ merkheim build
+$ markheim build
 # => The current folder will be generated into ./_site
 ```
 
@@ -39,7 +39,7 @@ $ markheim build
 ## Build and Serve a Site Locally
 
 ```shell
-$ merkheim serve
+$ markheim serve
 # => The current folder will be generated into ./_site and then served with BrowserSync
 ```
 
