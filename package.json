@@ -1,6 +1,6 @@
 {
   "name": "markheim",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Based on Gulp, inspired by Jekyll...it's Markheim, the killer static site generator for everyone.",
   "main": "index.js",
   "bin": {
