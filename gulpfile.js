@@ -367,39 +367,6 @@ gulp.task('posts', ['preprocess'], function() {
       return file;
     })
     .pipe(templatize(shared))
-    .pipe(highland())
-    .pipe(frontMatter.parse())
-    .pipe(frontMatter.collate(config))
-
-
-    /**
-     * Now set the page variables:
-     */
-
-    .pipe(es.map(function(file, cb) {
-      var fm = file.frontMatter;
-
-      if (fm) {
-        var content = String(file.contents);
-
-        file.page = merge(file.page, {
-          content: content,
-          comments: fm.comments,
-          title: fm.title,
-          excerpt: getExcerpt(config, content),
-          url: '',
-          date: fm.date,
-          id: '',
-          categories: fm.categories,
-          tags: fm.tags,
-          path: fm.path || file.path,
-          next: '',
-          prev: ''
-        });
-      }
-      cb(null, file);
-    }))
-    .pipe(templatize(shared))
 
     .pipe(frontMatter.parse())
     .pipe(frontMatter.collate(config))
