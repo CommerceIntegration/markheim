@@ -507,7 +507,7 @@ gulp.task('dryrun', ['preprocess'], function(/*cb*/) {
 
 var awspublish = require('gulp-awspublish');
 
-gulp.task('publish', function() {
+gulp.task('publish', ['build'], function() {
 
   /**
    * Create a new publisher using S3 options as described at:
