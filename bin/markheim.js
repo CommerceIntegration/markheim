@@ -13,7 +13,7 @@
 let spawn = require('child_process').spawn;
 
 spawn(
-  'node_modules/markheim/node_modules/.bin/gulp',
+  'node_modules/.bin/gulp',
   [
     '--gulpfile', 'node_modules/markheim/gulpfile.js',
     '--cwd', '.',
