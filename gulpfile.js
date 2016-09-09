@@ -227,7 +227,7 @@ gulp.task('preprocess', function(/*callback*/) {
   gutil.log('      Preprocessing...');
   var setType = require('./lib/set-type');
 
-  return gulp.src(src)
+  return gulp.src(src, {allowEmpty: true})
 
     /**
      * First work out the type of the document and collect its values:
@@ -495,7 +495,7 @@ gulp.task('publish', gulp.series('build', function() {
    * Process whatever is in the output directory:
    */
 
-  return gulp.src(path.join(paths.destination, config.baseurl, '**/*'))
+  return gulp.src(path.join(paths.destination, config.baseurl, '**/*'), {allowEmpty: true})
 
     /**
      * Publisher will add Content-Length, Content-Type and headers specified above
