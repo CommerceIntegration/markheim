@@ -6,6 +6,9 @@
   "bin": {
     "markheim": "./bin/markheim.js"
   },
+  "engines": {
+    "node": ">4.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
