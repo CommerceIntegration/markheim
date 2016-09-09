@@ -313,15 +313,6 @@ gulp.task('preprocess', function(/*callback*/) {
 
 
 /**
- * B U I L D
- * =========
- */
-
-gulp.task('build', ['posts'], function() {
-});
-
-
-/**
  * P O S T S
  * =========
  */
@@ -329,7 +320,7 @@ gulp.task('build', ['posts'], function() {
 var highland = require('highland');
 var md = require('markdown-it')({ html: true });
 
-gulp.task('posts', ['preprocess'], function() {
+gulp.task('posts', gulp.series('preprocess', function() {
   gutil.log('      Generating...');
 
   return highland(cache)
@@ -421,7 +412,15 @@ gulp.task('posts', ['preprocess'], function() {
     }))
     .pipe(gulp.dest(path.join(paths.destination, config.baseurl)))
     ;
-});
+}));
+
+
+/**
+ * B U I L D
+ * =========
+ */
+
+gulp.task('build', gulp.parallel('posts'));
 
 
 /**
@@ -429,7 +428,7 @@ gulp.task('posts', ['preprocess'], function() {
  * =========
  */
 
-gulp.task('serve', ['build'], function() {
+gulp.task('serve', gulp.series('build', function() {
   var browserSync = require('browser-sync').create();
 
   browserSync.init({
@@ -448,7 +447,7 @@ gulp.task('serve', ['build'], function() {
     files: paths.destination,
     startPath: config.baseurl
   });
-});
+}));
 
 
 /**
@@ -456,7 +455,7 @@ gulp.task('serve', ['build'], function() {
  * ===========
  */
 
-gulp.task('dryrun', ['preprocess'], function(/*cb*/) {
+gulp.task('dryrun', gulp.series('preprocess', function(cb) {
   console.log(config);
   // console.log(shared);
   // console.log(paths);
@@ -464,7 +463,8 @@ gulp.task('dryrun', ['preprocess'], function(/*cb*/) {
   // console.log(shared.site);
   // console.log(shared.site.posts);
   // console.log(shared.site.pages);
-});
+  cb();
+}));
 
 
 /**
@@ -474,7 +474,7 @@ gulp.task('dryrun', ['preprocess'], function(/*cb*/) {
 
 var awspublish = require('gulp-awspublish');
 
-gulp.task('publish', ['build'], function() {
+gulp.task('publish', gulp.series('build', function() {
 
   /**
    * Create a new publisher using S3 options as described at:
@@ -522,4 +522,4 @@ gulp.task('publish', ['build'], function() {
      */
 
     .pipe(awspublish.reporter());
-});
+}));
