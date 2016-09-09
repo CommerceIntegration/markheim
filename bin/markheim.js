@@ -17,6 +17,7 @@ spawn(
   [
     '--gulpfile', 'node_modules/markheim/gulpfile.js',
     '--cwd', '.',
+    '--log-level=LL',
     ...process.argv.slice(2)
   ],
   {stdio: 'inherit'}

@@ -85,7 +85,7 @@ paths.root = process.cwd();
 
 var userConfigFile = path.join(paths.root, config.config);
 
-gutil.log('Configuration file:', userConfigFile);
+console.log('Configuration file:', userConfigFile);
 
 try {
   config = merge(
@@ -107,8 +107,8 @@ paths.drafts = path.join(paths.root, config.drafts);
 
 config.paths = paths;
 
-gutil.log('            Source:', paths.source);
-gutil.log('       Destination:', paths.destination);
+console.log('            Source:', paths.source);
+console.log('       Destination:', paths.destination);
 
 /**
  * Set up the source descriptions with the source and any directories
@@ -224,7 +224,7 @@ var getExcerpt = function(config, content) {
  */
 
 gulp.task('preprocess', function(/*callback*/) {
-  gutil.log('      Preprocessing...');
+  console.log('      Preprocessing...');
   var setType = require('./lib/set-type');
 
   return gulp.src(src, {allowEmpty: true})
@@ -304,7 +304,7 @@ gulp.task('preprocess', function(/*callback*/) {
         else if (file.type === 'pages') {
           site.pages.push(page);
         } else {
-          gutil.log('Other type:', file.type, file.relative);
+          console.log('Other type:', file.type, file.relative);
         }
       }
       cb(null, file);
@@ -321,7 +321,7 @@ var highland = require('highland');
 var md = require('markdown-it')({ html: true });
 
 gulp.task('posts', gulp.series('preprocess', function() {
-  gutil.log('      Generating...');
+  console.log('      Generating...');
 
   return highland(cache)
 
